@@ -1,0 +1,26 @@
+When using velocity, it clicks on "next stream" (in ogg_stream::stream()) But
+this isn't due to a delay in adding new stream (tried ignoring ov_read and
+    alBufferData after a queue of 10 had been filled) - the problem seems to be
+as it goes from playing one buffer to the next. Perhaps it changes speed, or
+the speed it is playing leads it to jump to the end of the buffer, but not
+straight into the next one?
+
+Fixed bug - wasn't passing ogg stream by reference!!
+
+Fixed selection bug - was changing projection matrix back again in display! Now check render mode first!
+
+Working on scratch effects - see keyboard() and ogg_stream::tell etc.
+
+To make playlist:
+Get all the names of your ogg files:
+% find ~/ogg -name *.ogg > playlist
+Extract the titles:
+% perl -pi -e 'print;s#.*/(.*)\..*#$1#' playlist
+
+Format:
+<file>
+<title>
+
+Stopped soundmanager using capture so you can broadcast using shoutcast! (Unmute mic, set capture to MIX, and shoutcastplaylist to DSP:/dev/audio and it works!)
+
+Working on enqueue (double click)

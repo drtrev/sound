@@ -1,0 +1,18 @@
+Lessions 1-8 by Jesse Maurais - jesse_maurais@hotmail.com
+Lesson 9 by Spree Tree - SpreeTree@hotmail.com
+Port to Linux by Lee Trager - nukem@users.xeroprj.org
+
+Requirements:
+A sound server(OSS or ALSA) ALSA is the default on all kernels 2.6+
+OpenAL - http://www.OpenAL.org
+libvorbis - http://www.xiph.org/ogg/vorbis/index.html
+
+
+*nix notes:
+I have only tested these sources on Linux but theoretically they should work on any *nix
+
+Taken from:
+http://www.devmaster.net/articles/openal-tutorials/lesson8.php
+
+Trev additions:
+Added constant for number of buffers NUM_OGG_BUFFERS, and call empty() in playback function
