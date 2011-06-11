@@ -10,8 +10,8 @@ ogg_stream ogg[SOURCE_MAX];
 bool playFile(ogg_stream &ogg, const char* filename, float px, float py, float pz, float sx, float sy, float sz)
 {
   try {
-    //ogg.open_inmemory(filename);
-    ogg.open(filename);
+    ogg.open_inmemory(filename);
+    //ogg.open(filename);
   }catch(string error){
     cerr << "Error" << endl;
     //char c[50];
