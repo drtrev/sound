@@ -9,11 +9,12 @@ MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 
 include_directories( ../include )
 
-#link_directories( )
+link_directories( /usr/lib /usr/local/lib )
 
-set ( sound_SRCS buffer client main menu ogg server soundmanager test )
+set ( sound_SRCS buffer newmain ogg soundmanager )
 
-set ( sound_LIBS openal ogg )
+set ( sound_LIBS openal vorbis vorbisfile)
 
 add_executable( sound ${sound_SRCS} )
+target_link_libraries (sound ${sound_LIBS})
 
