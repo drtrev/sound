@@ -24,3 +24,11 @@ Format:
 Stopped soundmanager using capture so you can broadcast using shoutcast! (Unmute mic, set capture to MIX, and shoutcastplaylist to DSP:/dev/audio and it works!)
 
 Working on enqueue (double click)
+
+
+
+seems to help on eee pc 701:
+in ~/.openalrc
+(define devices '(sdl))
+
+see: http://wiki.eeeuser.com/eee_hardware_faq 
