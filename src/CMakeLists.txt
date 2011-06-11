@@ -11,9 +11,9 @@ include_directories( ../include )
 
 link_directories( /usr/lib /usr/local/lib )
 
-set ( sound_SRCS buffer main ogg soundmanager )
+set ( sound_SRCS buffer main ogg soundmanager windowgensdl windowgen graphicsopengl graphics outstd outverbose input inputSDL )
 
-set ( sound_LIBS openal vorbis vorbisfile)
+set ( sound_LIBS openal vorbis vorbisfile GL SDL)
 
 add_executable( sound ${sound_SRCS} )
 target_link_libraries (sound ${sound_LIBS})
