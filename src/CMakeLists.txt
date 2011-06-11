@@ -11,7 +11,7 @@ include_directories( ../include )
 
 link_directories( /usr/lib /usr/local/lib )
 
-set ( sound_SRCS buffer newmain ogg soundmanager )
+set ( sound_SRCS buffer main ogg soundmanager )
 
 set ( sound_LIBS openal vorbis vorbisfile)
 
