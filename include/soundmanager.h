@@ -56,7 +56,6 @@
 #include "AL/alc.h"
 //#include "AL/alut.h"
 #include <vector>
-#include "network.h"
 
 // this program was inspired by
 // http://www.devmaster.net/articles/openal-tutorials/lesson1.php
