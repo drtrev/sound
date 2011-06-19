@@ -34,6 +34,9 @@ Servercontrol::Servercontrol()
 
   SERV = true;
   keys = 0;
+
+  sources = 1;
+  source = new Source[1];
 }
 
 Servercontrol::~Servercontrol()
@@ -43,6 +46,7 @@ Servercontrol::~Servercontrol()
     delete graphics;
     std::cout << "Deleted graphics." << std::endl;
   }
+  delete [] source;
 }
 
 void Servercontrol::init(Args &args)
@@ -251,11 +255,21 @@ void Servercontrol::networkloop()
 
   //}
 
+  for (int i = 0; i < sources; i++) {
+    unit.position.flag = UNIT_POSITION;
+    unit.position.id = i;
+    setPos(unit, source[i].getPos());
+    net.addUnitAll(unit, server, -1);
+  }
+
   server.sendAll();
 }
 
 void Servercontrol::physicsloop()
 {
+  for (int i = 0; i < sources; i++) {
+    source[i].input(keyset[i], sync);
+  }
 }
 
 void Servercontrol::graphicsloop()

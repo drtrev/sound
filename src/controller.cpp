@@ -21,6 +21,7 @@
 
 #include "controller.h"
 #include "motlab/talk.h"
+#include "types.h"
 
 using std::cout;
 using std::cerr;
@@ -78,5 +79,12 @@ void Controller::initShared(verboseEnum verbosity, bool fullscreen)
   net.init(out);// flagsize, unitsize, MAX_CLIENTS);
   Talk talk; // just for getting chunk bytes
   net.setAudioDataSize(talk.getChunkBytes()); // TODO when use UDP remove this
+}
+
+void Controller::setPos(Unit &unit, geo::Vector pos)
+{
+  unit.position.x = pos.x;
+  unit.position.y = pos.y;
+  unit.position.z = pos.z;
 }
 

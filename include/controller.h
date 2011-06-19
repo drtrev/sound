@@ -28,6 +28,7 @@
 #include "motlab/network.h"
 #include "motlab/transfercontrol.h"
 #include <string>
+#include "types.h"
 
 #ifdef _MSC_VER
   inline double round(double x) { return floor(x + 0.5); }
@@ -68,6 +69,9 @@ class Controller {
 
     int players;
 
+    int sources;
+    Source* source;
+
     bool graphicsActive;
 
   public:
@@ -99,6 +103,7 @@ class Controller {
      */
     virtual void init(Args &args) = 0;
 
+    void setPos(Unit &unit, geo::Vector pos);
 };
 
 #endif

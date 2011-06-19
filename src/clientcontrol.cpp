@@ -6,6 +6,8 @@
   #include <winbase.h> // for Sleep
 #endif
 
+#include "types.h"
+
 Clientcontrol::Clientcontrol()
 {
   graphics = NULL;
@@ -141,7 +143,7 @@ void Clientcontrol::inputloop()
     unit.keys.id = myId;
     unit.keys.bits = keys;
 
-    //net.addUnit(unit, client);
+    net.addUnit(unit, client);
 
   }
 }
@@ -185,6 +187,10 @@ void Clientcontrol::process(Unit unit)
       }
       break;
     case UNIT_POSITION:
+      if (unit.position.id > IDHACK_SOURCE_MIN - 1 && unit.position.id < IDHACK_SOURCE_MAX + 1) {
+        std::cout << VERBOSE_LOUD << "received position for source: " << unit.position.id
+        << " pos: " << unit.position.x << ", " << unit.position.y << ", " << unit.position.z << std::endl;
+      }
       break;
     case UNIT_TRANSFER:
       break;
