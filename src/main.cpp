@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 
   while(1) {
     if (sourceProcess(ogg[0]) == 1) break;
-    usleep(1000);
+    usleep(10000);
   }
 
   return 0;
