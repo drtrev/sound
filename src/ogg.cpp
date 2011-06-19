@@ -298,10 +298,13 @@ void ogg_stream::initSource()
   vorbisInfo = ov_info(&oggStream, -1);
   vorbisComment = ov_comment(&oggStream, -1);
 
-  if(vorbisInfo->channels == 1)
+  if(vorbisInfo->channels == 1) {
     format = AL_FORMAT_MONO16;
-  else
+    cout << "AL_FORMAT_MONO16" << endl;
+  }else{
     format = AL_FORMAT_STEREO16;
+    cout << "AL_FORMAT_STEREO16" << endl;
+  }
 
   alGenBuffers(OGG_NUM_BUFFERS, buffers);
   check("generate buffers");

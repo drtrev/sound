@@ -52,10 +52,14 @@ struct SOggFile
 // 16384 / 128000 = 0.128 seconds stored in buffer for 128 kbit/s
 //#define OGG_BUFFER_SIZE (4096 * 4)
 //#define OGG_BUFFER_SIZE (4096 * 8) // works well but skips when changing windows and stuff
-#define OGG_BUFFER_SIZE (4096 * 16)
+//#define OGG_BUFFER_SIZE (4096 * 16)
+// 44100 * 2 = 88200
+// 8820 = 0.1 secs
+#define OGG_BUFFER_SIZE 17640
 
 
-#define OGG_NUM_BUFFERS 2
+//#define OGG_NUM_BUFFERS 2
+#define OGG_NUM_BUFFERS 4
 
 class ogg_stream
 {
