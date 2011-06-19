@@ -44,8 +44,9 @@ struct Args {
   bool fullscreen;
   bool graphicsActive;
   bool serv;
+  std::string soundFile;
 
-  Args() : port(3496), verbosity(VERBOSE_NORMAL), ip("127.0.0.1"), dontGrab(false), fullscreen(false), graphicsActive(true), serv(false) {}
+  Args() : port(3496), verbosity(VERBOSE_NORMAL), ip("127.0.0.1"), dontGrab(false), fullscreen(false), graphicsActive(true), serv(false), soundFile("") {}
 };
 
 /**

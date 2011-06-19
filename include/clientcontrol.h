@@ -7,6 +7,7 @@
 #include "inputSDL.h"
 #include "motlab/dev.h"
 #include "motlab/talk.h"
+#include "ogg.h"
 
 /**
  * Client control class.
@@ -31,6 +32,11 @@ class Clientcontrol : public Controller {
     int keys, keysOld; // which keys are being held down, each bit represents a key, see input.h
 
     int myId;  /**< My client ID. */
+
+    ogg_stream* ogg;
+    int oggs;
+
+    bool loadFile(ogg_stream &ogg, const char* filename);
 
   public:
     Clientcontrol();  /**< Constructor. */

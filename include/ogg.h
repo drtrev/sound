@@ -58,8 +58,8 @@ struct SOggFile
 #define OGG_BUFFER_SIZE 17640
 
 
-//#define OGG_NUM_BUFFERS 2
-#define OGG_NUM_BUFFERS 4
+#define OGG_NUM_BUFFERS 2
+//#define OGG_NUM_BUFFERS 4
 
 class ogg_stream
 {

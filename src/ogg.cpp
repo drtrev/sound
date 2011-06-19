@@ -308,8 +308,11 @@ void ogg_stream::initSource()
 
   alGenBuffers(OGG_NUM_BUFFERS, buffers);
   check("generate buffers");
+  cout << "generated buffers. buffers[0]: " << buffers[0] << endl;
+  cout << "generated buffers. buffers[1]: " << buffers[1] << endl;
   alGenSources(1, &source);
   check("generate sources");
+  cout << "generated source: " << source << endl;
   bufferIdx = 0;
 
   //ALfloat value = 0;
@@ -498,11 +501,16 @@ bool ogg_stream::playback(bool reset)
   // add data into buffers - there may not be enough data left to fill them all
   bufferIdx = 0;
   for (int i = 0; i < OGG_NUM_BUFFERS; i++) {
+    std::cout << "about to stream" << std::endl;
     active = stream(buffers[bufferIdx]);
+    cout << "done stream" << endl;
 
     if (active) {
+      cout << "aout to queue" << endl;
+      cout << "source: " << source << " , bufferIdx: " << bufferIdx << ", buffer: " << buffers[bufferIdx] << endl;
       alSourceQueueBuffers(source, 1, &buffers[bufferIdx]);
       check("queue buffers for playback");
+      cout << "done queue" << endl;
 
       bufferIdx++;
       if (bufferIdx > OGG_NUM_BUFFERS - 1) bufferIdx = 0;
@@ -511,6 +519,7 @@ bool ogg_stream::playback(bool reset)
       break; // stream has finished
   }
 
+  std::cout << "Got here! about to aalsourcePlay"<< std::endl;
   if (somethingGotBuffered) {
     alSourcePlay(source);
     return true;
@@ -760,7 +769,9 @@ bool ogg_stream::stream(ALuint buffer)
 
   while(size < OGG_BUFFER_SIZE)
   {
+    cout << "about to ov_read" << endl;
     result = ov_read(&oggStream, pcm + size, OGG_BUFFER_SIZE - size, 0, 2, 1, &section);
+    cout << "done ov_read" << endl;
 
     if(result > 0)
       size += result;
@@ -776,6 +787,7 @@ bool ogg_stream::stream(ALuint buffer)
 
   // for testing
   //if (count < 10) {
+    cout << "about to alBufferData" << endl;
     alBufferData(buffer, format, pcm, size, vorbisInfo->rate);
     check("buffer data");
   //}

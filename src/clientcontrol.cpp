@@ -1,5 +1,6 @@
 #include "clientcontrol.h"
 #include "graphicsopengl.h"
+#include "ogg.h"
 
 #ifdef _MSC_VER
   #include <windows.h> // for winbase
@@ -17,6 +18,9 @@ Clientcontrol::Clientcontrol()
   //input = new InputX11; if use this then delete in gameover
 
   myId = -1;
+
+  oggs = 1;
+  ogg = new ogg_stream[oggs];
 }
 
 Clientcontrol::~Clientcontrol()
@@ -26,6 +30,7 @@ Clientcontrol::~Clientcontrol()
     delete graphics;
     std::cout << "Deleted graphics." << std::endl;
   }
+  delete [] ogg;
 }
 
 void Clientcontrol::init(Args &args)
@@ -51,6 +56,14 @@ void Clientcontrol::init(Args &args)
   }
 
   if (!args.dontGrab) input.grab();
+
+  if (args.soundFile != "") {
+    loadFile(ogg[0], args.soundFile.c_str());
+    out << VERBOSE_QUIET << "opened ogg\n";
+  }else{
+    out << VERBOSE_LOUD << "Error, no ogg file specified\n";
+    exit(1);
+  }
 
   out << VERBOSE_QUIET << "Finished init.\n";
 }
@@ -100,10 +113,10 @@ void Clientcontrol::go()
     timer.update();
 
     doloop(inputdelay, inputtime, &Clientcontrol::inputloop);
-    //doloop(networkdelay, networktime, &Clientcontrol::networkloop);
+    doloop(networkdelay, networktime, &Clientcontrol::networkloop);
     //doloop(physicsdelay, physicstime, &Clientcontrol::physicsloop);
     //if (graphicsActive) doloop(graphicsdelay, graphicstime, &Clientcontrol::graphicsloop);
-    //doloop(sounddelay, soundtime, &Clientcontrol::soundloop);
+    doloop(sounddelay, soundtime, &Clientcontrol::soundloop);
     //doloop(transferdelay, transfertime, &Clientcontrol::transferloop);
 
 #ifdef _MSC_VER
@@ -187,9 +200,12 @@ void Clientcontrol::process(Unit unit)
       }
       break;
     case UNIT_POSITION:
-      if (unit.position.id > IDHACK_SOURCE_MIN - 1 && unit.position.id < IDHACK_SOURCE_MAX + 1) {
-        std::cout << VERBOSE_LOUD << "received position for source: " << unit.position.id
+      if (unit.position.id > IDHACK_SOURCE_MIN - 1 && unit.position.id < IDHACK_SOURCE_MIN + oggs) {
+        int id = unit.position.id - IDHACK_SOURCE_MIN;
+        std::cout << "received position for source: " << unit.position.id
         << " pos: " << unit.position.x << ", " << unit.position.y << ", " << unit.position.z << std::endl;
+        // TODO only if pos has changed, or only send pos when it changes - TODO check if geo always sends pos
+        ogg[id].setPosition(unit.position.x, unit.position.y, unit.position.z);
       }
       break;
     case UNIT_TRANSFER:
@@ -205,7 +221,7 @@ void Clientcontrol::process(Unit unit)
 
 void Clientcontrol::networkloop()
 {
-  /*client.doSelect();
+  client.doSelect();
   unit = client.recvDataUnit(net);
 
   while (unit.flag > -1) {
@@ -214,7 +230,7 @@ void Clientcontrol::networkloop()
     unit = client.recvDataUnit(net);
   }
 
-  client.sendData();*/
+  client.sendData();
 }
 
 void Clientcontrol::physicsloop()
@@ -248,7 +264,67 @@ void Clientcontrol::soundloop()
 {
   //if (talk.getCapturing()) talk.capture(myId, net, client);
   //if (soundDev.checkPlayContext()) talk.update();
+
+  // play next part of stream
+  //if (ogg.getPaused()) return 0;
+
+  out << VERBOSE_LOUD << "boom1\n";
+  // TODO loop over oggs
+  if (!ogg[0].update()) {
+    cout << "Ogg finished." << endl;
+    ogg[0].release();
+  }
+  out << VERBOSE_LOUD << "boom2\n";
 }
+
+bool Clientcontrol::loadFile(ogg_stream &ogg, const char* tempfilename)
+{
+  char filename[50];
+  snprintf(filename, 50, tempfilename);
+  try {
+    //ogg.open_inmemory(filename);
+    ogg.open(filename);
+  }catch(string error){
+    cerr << "Error" << endl;
+    //char c[50];
+    //snprintf(c, 50, "Could not open file: %s", filename);
+    //messageAdd(c);
+    return false; // failure
+  }
+
+  ogg.display();
+  ogg.setPosition(0, 0, 0);
+  ogg.setSpeed(0, 0, 0);
+  //ogg.updateVelocity();
+
+  try {
+    std::cout << "boom!" << std::endl;
+    if(!ogg.playback(false))
+      throw string("Ogg refused to play.");
+
+  }
+  catch(string error)
+  {
+    cout << error << endl;
+    //char c[50];
+    //snprintf(c, 50, "Error: %s", error.c_str());
+    //messageAdd(c);
+    return false; // failure
+  }
+
+  // TODO quick hack for binaural... it starts paused
+  /*if (!binaural.enabled) {
+    if (!ogg.playing()) {
+      cout << "Releasing ogg file and exiting..." << endl;
+      ogg.release();
+      exit(1);
+    }
+  }*/
+
+  std::cout << "got this far now!w" << endl;
+  return true; // success
+}
+
 
 void Clientcontrol::transferloop()
 // deal with file transfer

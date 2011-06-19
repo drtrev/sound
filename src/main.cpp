@@ -1,6 +1,5 @@
 #include "clientcontrol.h"
 #include "getopt_basic.h"
-#include "ogg.h"
 #include "servercontrol.h"
 
 using std::cout;
@@ -8,9 +7,6 @@ using std::cerr;
 using std::endl;
 
 namespace gob = getopt_basic;
-
-#define SOURCE_MAX 10
-ogg_stream ogg[SOURCE_MAX];
 
 Controller *controller;
 
@@ -21,63 +17,6 @@ void catchInterrupt(int sig)
   exit(0);
 }
 
-bool playFile(ogg_stream &ogg, const char* filename, float px, float py, float pz, float sx, float sy, float sz)
-{
-  try {
-    ogg.open_inmemory(filename);
-    //ogg.open(filename);
-  }catch(string error){
-    cerr << "Error" << endl;
-    //char c[50];
-    //snprintf(c, 50, "Could not open file: %s", filename);
-    //messageAdd(c);
-    return false; // failure
-  }
-
-  ogg.display();
-  ogg.setPosition(px, py, pz);
-  ogg.setSpeed(sx, sy, sz);
-  //ogg.updateVelocity();
-
-  try {
-    if(!ogg.playback(false))
-      throw string("Ogg refused to play.");
-
-  }
-  catch(string error)
-  {
-    cout << error << endl;
-    //char c[50];
-    //snprintf(c, 50, "Error: %s", error.c_str());
-    //messageAdd(c);
-    return false; // failure
-  }
-
-  // TODO quick hack for binaural... it starts paused
-  /*if (!binaural.enabled) {
-    if (!ogg.playing()) {
-      cout << "Releasing ogg file and exiting..." << endl;
-      ogg.release();
-      exit(1);
-    }
-  }*/
-
-  return true; // success
-}
-
-int sourceProcess(ogg_stream &ogg)
-{
-  // play next part of stream
-  //if (ogg.getPaused()) return 0;
-
-  if (!ogg.update()) {
-    cout << "Ogg finished." << endl;
-    ogg.release();
-    return 1;
-  }
-  return 0;
-}
-
 void processCLAs(int argc, char** argv, Args &args)
 {
   struct gob::option options[] = {
@@ -86,6 +25,7 @@ void processCLAs(int argc, char** argv, Args &args)
     {"help", no_argument, 0, 'h'},
     {"ipaddress", required_argument, 0, 'i'},
     {"nowindow", no_argument, 0, 'n'},
+    {"ogg", required_argument, 0, 'o'},
     {"quiet", no_argument, 0, 'q'},
     {"server", no_argument, 0, 's'},
     {"verbose", no_argument, 0, 'v'},
@@ -96,7 +36,7 @@ void processCLAs(int argc, char** argv, Args &args)
   int c = 0;
 
   // returns EOF (-1) when reaches end of CLAs
-  while ((c = gob::getopt_basic(argc, argv, "dfhi:nqsv", options, &optionIndex)) != EOF) {
+  while ((c = gob::getopt_basic(argc, argv, "dfhi:no:qsv", options, &optionIndex)) != EOF) {
     switch (c) {
       case 'd': // don't grab keyboard
         args.dontGrab = true;
@@ -120,6 +60,9 @@ void processCLAs(int argc, char** argv, Args &args)
         break;
       case 'n':
         args.graphicsActive = false;
+        break;
+      case 'o':
+        args.soundFile = gob::optarg;
         break;
       case 'q':
         if (args.verbosity == VERBOSE_LOUD) args.verbosity = VERBOSE_NORMAL; // got v as well
