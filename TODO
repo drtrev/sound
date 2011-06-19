@@ -1,0 +1,3 @@
+remove buffer.cpp and buffer.h
+remove soundmanager
+remove network.h
