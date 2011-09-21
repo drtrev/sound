@@ -28,12 +28,10 @@
 #include "motlab/network.h"
 #include "motlab/transfercontrol.h"
 #include <string>
+#include "types.h"
 
 #ifdef _MSC_VER
   inline double round(double x) { return floor(x + 0.5); }
-  #include "types.h"
-#else
-  #include <sys/types.h>
 #endif
 
 class Client; class Graphics; class Player; class Server;

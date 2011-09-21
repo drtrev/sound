@@ -1,15 +1,12 @@
 #include "clientcontrol.h"
 #include "graphicsopengl.h"
+#include "types.h"
 #include "ogg.h"
 
 #ifdef _MSC_VER
   #include <windows.h> // for winbase
   #include <winbase.h> // for Sleep
-  #include "types.h"
-#else
-  #include <sys/types.h>
 #endif
-
 
 Clientcontrol::Clientcontrol()
 {
