@@ -576,6 +576,11 @@ void ogg_stream::getPosition(float &nx, float &ny, float &nz)
   nx = props.pos.x, ny = props.pos.y, nz = props.pos.z;
 }
 
+sound::Vector ogg_stream::getPosition()
+{
+  return props.pos;
+}
+
 float ogg_stream::getX()
 {
   return props.pos.x;

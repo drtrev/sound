@@ -85,6 +85,7 @@ class ogg_stream
     int getSourceId();
     void setPosition(float, float, float);
     void getPosition(float&, float&, float&);
+    sound::Vector getPosition();
     float getX();
     float getY();
     float getZ();

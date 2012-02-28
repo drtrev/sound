@@ -305,7 +305,7 @@ bool Clientcontrol::loadFile(ogg_stream &ogg, const char* tempfilename)
   }
 
   ogg.display();
-  ogg.setPosition(0, 0, 0);
+  ogg.setPosition(12, 0, -15);
   ogg.setSpeed(0, 0, 0);
   //ogg.updateVelocity();
 

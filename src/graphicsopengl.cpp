@@ -106,6 +106,9 @@ bool GraphicsOpenGL::init(Outverbose &o, WindowInfo w, const char* font, int fon
     // see man glColorMaterial
     glEnable(GL_COLOR_MATERIAL);
 
+    glEnable(GL_POLYGON_SMOOTH);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+
     // lights
     setupLights();
     return true; // success
@@ -158,7 +161,7 @@ void GraphicsOpenGL::drawStart()
   glPushMatrix();
   //glScalef(1, -1, 1);
   //glTranslatef(-out->getWidth(), -out->getWidth(), -out->getWidth()); // move camera out
-  glTranslatef(0, 3, -10);
+  glTranslatef(0, -1, -10);
   glRotatef(30, 1, 0, 0);
 
   /*float zoom = 128;
