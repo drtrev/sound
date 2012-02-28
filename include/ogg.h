@@ -161,7 +161,7 @@ class ogg_stream
       bool moving, homing, frictionon, paused;
       float pitch, power, friction, minSpeed;
 
-      Props() : moving(true), homing(false), frictionon(true), paused(false), pitch(1), power(1000), friction(400), minSpeed(0.001) {}
+      Props() : moving(true), homing(false), frictionon(true), paused(false), pitch(1), power(800), friction(400), minSpeed(0.001) {}
     } props;
 
     float synclimit;

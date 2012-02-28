@@ -153,7 +153,7 @@ void GraphicsOpenGL::drawStart()
 {
   //glDisable(GL_DEPTH_TEST);
   glViewport(0, 0, window->getWidth(), window->getHeight());
-  glClearColor(0, 0, 0, 1);
+  glClearColor(0.5, 0.4, 0.6, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glPushMatrix();
   //glScalef(1, -1, 1);

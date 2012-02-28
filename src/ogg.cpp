@@ -331,7 +331,7 @@ void ogg_stream::initSource()
   alSource3f(source, AL_VELOCITY,        0.0, 0.0, 0.0);
   alSource3f(source, AL_DIRECTION,       0.0, 0.0, 0.0); // if not zero, sound is directional
 
-  alSourcef (source, AL_ROLLOFF_FACTOR,  2); // default 1
+  alSourcef (source, AL_ROLLOFF_FACTOR,  4); // default 1, was 2
   alSourcef (source, AL_REFERENCE_DISTANCE, 50); // default 1 - clamp gain below this
   alSourcei (source, AL_SOURCE_RELATIVE, AL_TRUE);
 
@@ -981,7 +981,7 @@ void ogg_stream::moveme(double sync)
   props.oldAccel = props.accel; // may be modified in input
 
   if (sourceInitialised) {
-    ALfloat sourcePosition[] = { props.pos.x, props.pos.y, props.pos.z };
+    ALfloat sourcePosition[] = { props.pos.x * 3, props.pos.y * 3, props.pos.z * 3 }; // TODO temp hack
     alSourcefv(source, AL_POSITION, sourcePosition);
     check("set position");
   }
