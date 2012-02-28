@@ -104,7 +104,7 @@ class Controller {
      */
     virtual void init(Args &args) = 0;
 
-    void setPos(Unit &unit, geo::Vector pos);
+    void setPos(Unit &unit, sound::Vector pos);
 };
 
 #endif

@@ -77,11 +77,11 @@ void Controller::initShared(verboseEnum verbosity, bool fullscreen)
 
   // network TODO tidy
   net.init(out);// flagsize, unitsize, MAX_CLIENTS);
-  Talk talk; // just for getting chunk bytes
-  net.setAudioDataSize(talk.getChunkBytes()); // TODO when use UDP remove this
+  //Talk talk; // just for getting chunk bytes
+  //net.setAudioDataSize(talk.getChunkBytes()); // TODO when use UDP remove this
 }
 
-void Controller::setPos(Unit &unit, geo::Vector pos)
+void Controller::setPos(Unit &unit, sound::Vector pos)
 {
   unit.position.x = pos.x;
   unit.position.y = pos.y;

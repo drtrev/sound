@@ -31,11 +31,14 @@
  * \param blue the amount of blue from 0 to 1.
  * \param alpha the amount of alpha from 0 to 1.
  */
-struct Color {
+struct Colour {
   float red;
   float green;
   float blue;
   float alpha;
+
+  Colour() : red(0), green(0), blue(0), alpha(1) {}
+  Colour(float _red, float _green, float _blue, float _alpha) : red(_red), green(_green), blue(_blue), alpha(_alpha) {}
 };
 
 /**
@@ -78,14 +81,14 @@ struct GraphicsInfo {
   float scaleY;
   float scaleZ;
 
-  Color color;
+  Colour colour;
 
   int texture;
   std::string text;
   bool visible;
 };
 
-class Outverbose;
+class Outverbose; class ogg_stream;
 
 /**
  * The graphics interface.
@@ -123,9 +126,9 @@ class Graphics {
      * \param green the amount of green from 0 to 1.
      * \param blue the amount of blue from 0 to 1.
      * \param alpha the amount of alpha from 0 to 1.
-     * \return the Color.
+     * \return the Colour.
      */
-    Color makeColor(float red, float green, float blue, float alpha);
+    Colour makeColour(float red, float green, float blue, float alpha);
 
     /**
      * Make graphics information.
@@ -151,7 +154,7 @@ class Graphics {
      * \param visible specify whether the object should be rendered.
      * \return the GraphicsInfo.
      */
-    GraphicsInfo makeInfo(float x, float y, float z, float width, float height, float depth, float angleX, float angleY, float angleZ, float pivotX, float pivotY, float pivotZ, float scaleX, float scaleY, float scaleZ, Color color, int texture, std::string text, bool visible);
+    GraphicsInfo makeInfo(float x, float y, float z, float width, float height, float depth, float angleX, float angleY, float angleZ, float pivotX, float pivotY, float pivotZ, float scaleX, float scaleY, float scaleZ, Colour color, int texture, std::string text, bool visible);
 
     /**
      * Get a graphics info struct populated with default info.
@@ -179,6 +182,8 @@ class Graphics {
 
     virtual void drawStart() = 0; /**< Perform any operations required before drawing begins. */
     virtual void drawThumbStart() = 0; /**< Perform any operations required before drawing thumbnail begins. */
+
+    virtual void drawSources(int nogg, ogg_stream ogg[]) = 0;
 
     /**
      * Render some text. \param g the graphics information for rendering the

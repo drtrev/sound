@@ -2,11 +2,12 @@
 #define TYPES_H
 
 #include "input.h"
+#include <cmath>
 
 #define IDHACK_SOURCE_MIN 0
 #define IDHACK_SOURCE_MAX 5
 
-namespace geo {
+namespace sound {
 
 struct Vector {
   float x;
@@ -183,9 +184,15 @@ inline std::ostream& operator<<(std::ostream &os, const Vector &v)
 
 const double PI = 3.14159265;
 
+// TODO remove all these inlines? why is it multiply defined?
 inline float rad(float f)
 {
   return f / 180.0 * PI;
+}
+
+inline float deg(float f)
+{
+  return f / PI * 180.0;
 }
 
 struct Plane {
@@ -201,9 +208,9 @@ struct Ray {
 }
 
 struct Source {
-  geo::Vector pos;
+  sound::Vector pos;
 
-  geo::Vector getPos() { return pos; }
+  sound::Vector getPos() { return pos; }
 
   void input(int keys, double sync) {
     if (keys & KEYS_LEFT) {

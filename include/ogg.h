@@ -85,7 +85,11 @@ class ogg_stream
     void setPosition(float, float, float);
     void getPosition(float&, float&, float&);
     float getX();
+    float getY();
+    float getZ();
     void setX(float);
+    void setY(float);
+    void setZ(float);
     void setSpeed(float, float, float);
     void getSpeed(float&, float&, float&);
     /*void updateVelocity();

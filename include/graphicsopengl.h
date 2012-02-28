@@ -21,6 +21,7 @@
 #define GRAPHICS_OPENGL_H
 
 #include "graphics.h"
+#include "types.h"
 
 // define NOOGLFT to compile without this library
 
@@ -103,6 +104,9 @@ class GraphicsOpenGL : public Graphics {
 
     void drawStart();
     void drawThumbStart();
+
+    void drawObject(sound::Vector pos, sound::Vector rot, sound::Vector size, Colour col);
+    void drawSources(int nogg, ogg_stream ogg[]);
 
     void drawText(GraphicsInfo g);
     void drawViewbox(double posX, double posY, double scale, double thumbOffsetX, double thumbOffsetY, double thumbScale, float r, float g, float b, float a);

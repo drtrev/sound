@@ -32,13 +32,13 @@ void Graphics::initShared(Outverbose &o)
   out = &o;
 }
 
-Color Graphics::makeColor(float red, float green, float blue, float alpha)
+Colour Graphics::makeColour(float red, float green, float blue, float alpha)
 {
-  Color color = { red, green, blue, alpha };
+  Colour color(red, green, blue, alpha);
   return color;
 }
 
-GraphicsInfo Graphics::makeInfo(float x, float y, float z, float width, float height, float depth, float angleX, float angleY, float angleZ, float pivotX, float pivotY, float pivotZ, float scaleX, float scaleY, float scaleZ, Color color, int texture, std::string text, bool visible)
+GraphicsInfo Graphics::makeInfo(float x, float y, float z, float width, float height, float depth, float angleX, float angleY, float angleZ, float pivotX, float pivotY, float pivotZ, float scaleX, float scaleY, float scaleZ, Colour color, int texture, std::string text, bool visible)
 {
   GraphicsInfo info = { x, y, z, width, height, depth, angleX, angleY, angleZ, pivotX, pivotY, pivotZ, scaleX, scaleY, scaleZ, color, texture, text, visible };
   return info;
@@ -46,7 +46,7 @@ GraphicsInfo Graphics::makeInfo(float x, float y, float z, float width, float he
 
 GraphicsInfo Graphics::defaultInfo()
 {
-  GraphicsInfo info = { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, makeColor(1, 1, 1, 1), 0, "", true };
+  GraphicsInfo info = { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, makeColour(1, 1, 1, 1), 0, "", true };
   return info;
 }
 

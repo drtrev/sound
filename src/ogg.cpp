@@ -502,16 +502,16 @@ bool ogg_stream::playback(bool reset)
   // add data into buffers - there may not be enough data left to fill them all
   bufferIdx = 0;
   for (int i = 0; i < OGG_NUM_BUFFERS; i++) {
-    std::cout << "about to stream" << std::endl;
+    //std::cout << "about to stream" << std::endl;
     active = stream(buffers[bufferIdx]);
-    cout << "done stream" << endl;
+    //cout << "done stream" << endl;
 
     if (active) {
-      cout << "aout to queue" << endl;
-      cout << "source: " << source << " , bufferIdx: " << bufferIdx << ", buffer: " << buffers[bufferIdx] << endl;
+      //cout << "aout to queue" << endl;
+      //cout << "source: " << source << " , bufferIdx: " << bufferIdx << ", buffer: " << buffers[bufferIdx] << endl;
       alSourceQueueBuffers(source, 1, &buffers[bufferIdx]);
       check("queue buffers for playback");
-      cout << "done queue" << endl;
+      //cout << "done queue" << endl;
 
       bufferIdx++;
       if (bufferIdx > OGG_NUM_BUFFERS - 1) bufferIdx = 0;
@@ -520,7 +520,7 @@ bool ogg_stream::playback(bool reset)
       break; // stream has finished
   }
 
-  std::cout << "Got here! about to aalsourcePlay"<< std::endl;
+  //std::cout << "Got here! about to aalsourcePlay"<< std::endl;
   if (somethingGotBuffered) {
     alSourcePlay(source);
     return true;
@@ -572,9 +572,29 @@ float ogg_stream::getX()
   return x;
 }
 
+float ogg_stream::getY()
+{
+  return y;
+}
+
+float ogg_stream::getZ()
+{
+  return z;
+}
+
 void ogg_stream::setX(float nx)
 {
   x = nx;
+}
+
+void ogg_stream::setY(float nx)
+{
+  y = nx;
+}
+
+void ogg_stream::setZ(float nx)
+{
+  z = nx;
 }
 
 void ogg_stream::setSpeed(float sx, float sy, float sz)
@@ -770,9 +790,9 @@ bool ogg_stream::stream(ALuint buffer)
 
   while(size < OGG_BUFFER_SIZE)
   {
-    cout << "about to ov_read" << endl;
+    //cout << "about to ov_read" << endl;
     result = ov_read(&oggStream, pcm + size, OGG_BUFFER_SIZE - size, 0, 2, 1, &section);
-    cout << "done ov_read" << endl;
+    //cout << "done ov_read" << endl;
 
     if(result > 0)
       size += result;
@@ -788,7 +808,7 @@ bool ogg_stream::stream(ALuint buffer)
 
   // for testing
   //if (count < 10) {
-    cout << "about to alBufferData" << endl;
+    //cout << "about to alBufferData" << endl;
     alBufferData(buffer, format, pcm, size, vorbisInfo->rate);
     check("buffer data");
   //}

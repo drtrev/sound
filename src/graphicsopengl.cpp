@@ -29,11 +29,13 @@
 //#include "windowgenglut.h"
 #include "outverbose.h"
 #include "windowgensdl.h"
+#include "ogg.h"
+#include "types.h"
 
 using std::cout;
 using std::cerr;
 using std::endl;
-
+using namespace sound;
 
 // testing - didn't seem to help
 //extern "C" {
@@ -178,7 +180,7 @@ void GraphicsOpenGL::drawStart()
   glEnd();*/
 
   // draw axis (temporarily to help)
-  /*glColor4f(1, 1, 1, 1);
+  glColor4f(1, 1, 1, 1);
   glBegin(GL_LINES);
   glNormal3f(0, 0, 1);
   glVertex3f(0, -50, 0);
@@ -187,7 +189,7 @@ void GraphicsOpenGL::drawStart()
   glVertex3f(-50, 0, 0);
   glVertex3f(50, 0, 0);
   glEnd();
-  glBegin(GL_QUADS); // testing
+  /*glBegin(GL_QUADS); // testing
   glVertex3f(-100, -100, -10);
   glVertex3f(100, -100, -10);
   glVertex3f(100, 100, -10);
@@ -225,6 +227,93 @@ void GraphicsOpenGL::drawThumbStart()
   glVertex3f(border.left, border.top, 0);
   glEnd();
 
+}
+
+void GraphicsOpenGL::drawObject(sound::Vector pos, sound::Vector rot, sound::Vector size, Colour col)
+{
+  glPushMatrix();
+  glTranslatef(pos.x, pos.y, pos.z);
+  glRotatef(rot.x, 1, 0, 0);
+  glRotatef(rot.y+180, 0, 1, 0); // draw facing -z
+  glRotatef(rot.z, 0, 0, 1);
+
+  glColor4f(col.red, col.green, col.blue, col.alpha);
+
+  size.x /= 2.0, size.y /= 2.0, size.z /= 2.0;
+
+  glBegin(GL_TRIANGLES);
+  glNormal3f(0.0, 1.0, 0.0);
+  glVertex3f(-size.x, size.y, size.z); // top
+  glVertex3f(size.x, size.y, size.z);
+  glVertex3f(0, size.y, -size.z);
+
+  glNormal3f(0.0, -1.0, 0.0);
+  glVertex3f(-size.x, -size.y, size.z); // bottom
+  glVertex3f(0, -size.y, -size.z);
+  glVertex3f(size.x, -size.y, size.z);
+  glEnd();
+
+  glBegin(GL_QUADS);
+  glNormal3f(-0.7, 0.0, -0.7); // left
+  glVertex3f(0, -size.y, -size.z);
+  glVertex3f(-size.x, -size.y, size.z);
+  glVertex3f(-size.x, size.y, size.z);
+  glVertex3f(0, size.y, -size.z);
+
+  glNormal3f(0.7, 0.0, -0.7); // right
+  glVertex3f(size.x, -size.y, size.z);
+  glVertex3f(0, -size.y, -size.z);
+  glVertex3f(0, size.y, -size.z);
+  glVertex3f(size.x, size.y, size.z);
+
+  glNormal3f(0.0, 0.0, 1.0); // Back
+  glVertex3f(-size.x, -size.y, size.z);
+  glVertex3f(size.x, -size.y, size.z);
+  glVertex3f(size.x, size.y, size.z);
+  glVertex3f(-size.x, size.y, size.z);
+  glEnd();
+
+  glPopMatrix();
+}
+
+void GraphicsOpenGL::drawSources(int nogg, ogg_stream ogg[])
+{
+  float x = 0, y = 0, z = 0;
+  //float angleX = 0;
+  float angleY = 0;
+  //float angleZ = 0;
+  //
+  for (int i = 0; i < nogg; i++) {
+    ogg[i].getPosition(x, y, z);
+
+    if (ogg[i].getSpeedX() > 0) {
+      if (ogg[i].getSpeedZ() > 0) {
+        angleY = deg(atan(ogg[i].getSpeedX()/ogg[i].getSpeedZ()));
+      }else if (ogg[i].getSpeedZ() < 0) {
+        angleY = 90+deg(atan(-ogg[i].getSpeedZ()/ogg[i].getSpeedX()));
+      }else angleY = 90;
+    }else if (ogg[i].getSpeedX() < 0) {
+      if (ogg[i].getSpeedZ() < 0) {
+        angleY = 180+deg(atan(ogg[i].getSpeedX()/ogg[i].getSpeedZ()));
+      }else if (ogg[i].getSpeedZ() > 0) {
+        angleY = 270+deg(atan(ogg[i].getSpeedZ()/-ogg[i].getSpeedX()));
+      }else angleY = -90;
+    }else{
+      if (ogg[i].getSpeedZ() < 0) angleY = 180;
+      else angleY = 0;
+    }
+
+
+    //cout << "angleY: " << angleY << endl;
+    //angleX = radToDeg(atan(ogg.getSpeedY()/ogg.getSpeedZ()));
+
+    // TODO sort this out
+    sound::Vector pos(ogg[i].getX(), ogg[i].getY(), ogg[i].getZ());
+    sound::Vector rot(0, angleY, 0);
+    sound::Vector size(4, 4, 8);
+    Colour col(0.8, 0.8, 0.8, 1.0);
+    drawObject(pos, rot, size, col);
+  }
 }
 
 void GraphicsOpenGL::flip()
