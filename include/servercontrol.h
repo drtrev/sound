@@ -41,11 +41,7 @@ class Servercontrol : public Controller {
     int keyset[MAX_CLIENTS]; /**< Keys received from clients. */
     int keys; /**< Keys pressed by server user. */
 
-    // TODO use geo::Vector
-    struct Vector {
-      float x, y, z;
-      Vector() : x(0), y(0), z(0) {}
-    } oldposition[MAX_CLIENTS];
+    sound::Vector *oldpos;
 
   public:
     Servercontrol(); /**< Constructor. */

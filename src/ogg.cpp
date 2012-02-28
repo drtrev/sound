@@ -307,6 +307,10 @@ void ogg_stream::initSource()
     cout << "AL_FORMAT_STEREO16" << endl;
   }
 
+  // hack it to mono
+  //format = AL_FORMAT_MONO16;
+  
+
   alGenBuffers(OGG_NUM_BUFFERS, buffers);
   check("generate buffers");
   cout << "generated buffers. buffers[0]: " << buffers[0] << endl;
@@ -329,8 +333,10 @@ void ogg_stream::initSource()
   alSourcef (source, AL_REFERENCE_DISTANCE, 50); // default 1 - clamp gain below this
   alSourcei (source, AL_SOURCE_RELATIVE, AL_TRUE);
 
+  alListener3f( AL_POSITION, 0, 0, 0);
+
   sourceInitialised = true;
-  //cout << "Source initialised" << endl;
+  cout << "Source initialised" << endl;
 }
 
 
@@ -556,6 +562,7 @@ void ogg_stream::setPosition(float nx, float ny, float nz)
 {
   x = nx, y = ny, z = nz;
   if (sourceInitialised) {
+    cout << "Setting pos: " << x << "," << y << "," << z << endl;
     ALfloat sourcePosition[] = { x, y, z };
     alSourcefv(source, AL_POSITION, sourcePosition);
     check("set position");

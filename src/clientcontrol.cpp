@@ -307,7 +307,7 @@ bool Clientcontrol::loadFile(ogg_stream &ogg, const char* tempfilename)
   //ogg.updateVelocity();
 
   try {
-    std::cout << "boom!" << std::endl;
+    //std::cout << "boom!" << std::endl;
     if(!ogg.playback(false))
       throw string("Ogg refused to play.");
 

@@ -36,7 +36,8 @@ Servercontrol::Servercontrol()
   keys = 0;
 
   sources = 1;
-  source = new Source[1];
+  source = new Source[sources];
+  oldpos = new sound::Vector[sources];
 }
 
 Servercontrol::~Servercontrol()
@@ -47,6 +48,7 @@ Servercontrol::~Servercontrol()
     std::cout << "Deleted graphics." << std::endl;
   }
   delete [] source;
+  delete [] oldpos;
 }
 
 void Servercontrol::init(Args &args)
@@ -55,13 +57,13 @@ void Servercontrol::init(Args &args)
 {
   initShared(args.verbosity, args.fullscreen);
 
-  if (args.graphicsActive) {
+  /*if (args.graphicsActive) {
     graphicsActive = true;
     graphics = new GraphicsOpenGL;
     out << VERBOSE_NORMAL << "Initialising graphics...\n";
     graphics->init(out, graphics->makeWindowInfo(0, 0, 100, 100, true, true, 60, 24, args.fullscreen, "Title"),
           "/usr/share/fonts/bitstream-vera/Vera.ttf", 42);
-  }else graphicsActive = false;
+  }else*/ graphicsActive = false;
 
   // note number of pending connection requests allowed
   server.init(out, args.port, 10, net.getFlagsize(), net.getUnitsize());
@@ -256,10 +258,15 @@ void Servercontrol::networkloop()
   //}
 
   for (int i = 0; i < sources; i++) {
-    unit.position.flag = UNIT_POSITION;
-    unit.position.id = i;
-    setPos(unit, source[i].getPos());
-    net.addUnitAll(unit, server, -1);
+    sound::Vector v1 = oldpos[i];
+    sound::Vector v2 = source[i].getPos();
+    if (v1 != v2) {
+      unit.position.flag = UNIT_POSITION;
+      unit.position.id = i;
+      setPos(unit, source[i].getPos());
+      net.addUnitAll(unit, server, -1);
+      oldpos[i] = source[i].getPos();
+    }
   }
 
   server.sendAll();
