@@ -18,6 +18,7 @@
  */
 
 #include "ogg.h"
+#include <cstring>
 
 // Can load file into memory all at once, or play from a file, depending which open method is called
 

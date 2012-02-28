@@ -53,6 +53,18 @@ void processCLAs(int argc, char** argv, Args &args)
         cout << "    open in fullscreen mode" << endl;
         cout << "  -h  --help" << endl;
         cout << "    display this help" << endl;
+        cout << "  -i  --ipaddress" << endl;
+        cout << "    ip address of server" << endl;
+        cout << "  -n  --nowindow" << endl;
+        cout << "    no window" << endl;
+        cout << "  -o  --ogg" << endl;
+        cout << "    sound file" << endl;
+        cout << "  -q  --quiet" << endl;
+        cout << "    less verbose" << endl;
+        cout << "  -s  --server" << endl;
+        cout << "    run server" << endl;
+        cout << "  -v  --verbose" << endl;
+        cout << "    more verbose" << endl;
         exit(0);
         break;
       case 'i':
@@ -76,7 +88,7 @@ void processCLAs(int argc, char** argv, Args &args)
         else args.verbosity = VERBOSE_LOUD;
         break;
       case '?': // error
-        cerr << "For usage instructions use './geo -h' or './geo --help'" << endl;
+        cerr << "For usage instructions use './sound -h' or './sound --help'" << endl;
         break;
     }
   }

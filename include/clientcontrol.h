@@ -20,7 +20,7 @@ class Clientcontrol : public Controller {
     //InputX11 input; // doesn't seem to work in fullscreen
     InputSDL input; /**< Input object. */
     SoundDev soundDev; /**< Sound device instance. */
-    Talk talk; /**< Talk instance, used for capturing audio from the microphone. */
+    //Talk talk; /**< Talk instance, used for capturing audio from the microphone. */
 
     /** \var keys
      * Store which keys are being held down as a bitfield. Each bit represents a

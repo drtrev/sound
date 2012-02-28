@@ -56,6 +56,12 @@ void Clientcontrol::init(Args &args)
 
   if (!args.dontGrab) input.grab();
 
+  soundDev.initOutput(out);
+  if (!soundDev.grab()) {
+    std::cerr << VERBOSE_LOUD << "Error grabbing sound dev" << std::endl;
+    exit(1);
+  }
+
   if (args.soundFile != "") {
     loadFile(ogg[0], args.soundFile.c_str());
     out << VERBOSE_QUIET << "opened ogg\n";
@@ -201,8 +207,8 @@ void Clientcontrol::process(Unit unit)
     case UNIT_POSITION:
       if (unit.position.id > IDHACK_SOURCE_MIN - 1 && unit.position.id < IDHACK_SOURCE_MIN + oggs) {
         int id = unit.position.id - IDHACK_SOURCE_MIN;
-        std::cout << "received position for source: " << unit.position.id
-        << " pos: " << unit.position.x << ", " << unit.position.y << ", " << unit.position.z << std::endl;
+        //std::cout << "received position for source: " << unit.position.id
+        //<< " pos: " << unit.position.x << ", " << unit.position.y << ", " << unit.position.z << std::endl;
         // TODO only if pos has changed, or only send pos when it changes - TODO check if geo always sends pos
         ogg[id].setPosition(unit.position.x, unit.position.y, unit.position.z);
       }
@@ -267,13 +273,14 @@ void Clientcontrol::soundloop()
   // play next part of stream
   //if (ogg.getPaused()) return 0;
 
-  out << VERBOSE_LOUD << "boom1\n";
+  //out << VERBOSE_LOUD << "boom1\n";
   // TODO loop over oggs
   if (!ogg[0].update()) {
     cout << "Ogg finished." << endl;
     ogg[0].release();
+    exit(0);
   }
-  out << VERBOSE_LOUD << "boom2\n";
+  //out << VERBOSE_LOUD << "boom2\n";
 }
 
 bool Clientcontrol::loadFile(ogg_stream &ogg, const char* tempfilename)
