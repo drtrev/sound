@@ -158,6 +158,8 @@ void GraphicsOpenGL::drawStart()
   glPushMatrix();
   //glScalef(1, -1, 1);
   //glTranslatef(-out->getWidth(), -out->getWidth(), -out->getWidth()); // move camera out
+  glTranslatef(0, 3, -10);
+  glRotatef(30, 1, 0, 0);
 
   /*float zoom = 128;
   glTranslatef(0, 0, -zoom);
@@ -180,7 +182,7 @@ void GraphicsOpenGL::drawStart()
   glEnd();*/
 
   // draw axis (temporarily to help)
-  glColor4f(1, 1, 1, 1);
+  /*glColor4f(1, 1, 1, 1);
   glBegin(GL_LINES);
   glNormal3f(0, 0, 1);
   glVertex3f(0, -50, 0);
@@ -188,7 +190,7 @@ void GraphicsOpenGL::drawStart()
 
   glVertex3f(-50, 0, 0);
   glVertex3f(50, 0, 0);
-  glEnd();
+  glEnd();*/
   /*glBegin(GL_QUADS); // testing
   glVertex3f(-100, -100, -10);
   glVertex3f(100, -100, -10);
@@ -283,6 +285,12 @@ void GraphicsOpenGL::drawSources(int nogg, ogg_stream ogg[])
   float angleY = 0;
   //float angleZ = 0;
   //
+  Vector pos(0, 0, 0);
+  Vector rot(0, 180, 0);
+  Vector size(0.4, 0.4, 0.8);
+  Colour col(0.8, 0.8, 0.8, 1.0);
+  drawObject(pos, rot, size, col);
+
   for (int i = 0; i < nogg; i++) {
     ogg[i].getPosition(x, y, z);
 
@@ -307,11 +315,10 @@ void GraphicsOpenGL::drawSources(int nogg, ogg_stream ogg[])
     //cout << "angleY: " << angleY << endl;
     //angleX = radToDeg(atan(ogg.getSpeedY()/ogg.getSpeedZ()));
 
-    // TODO sort this out
-    sound::Vector pos(ogg[i].getX(), ogg[i].getY(), ogg[i].getZ());
-    sound::Vector rot(0, angleY, 0);
-    sound::Vector size(4, 4, 8);
-    Colour col(0.8, 0.8, 0.8, 1.0);
+    Vector pos(ogg[i].getX(), ogg[i].getY(), ogg[i].getZ());
+    Vector rot(0, angleY, 0);
+    Vector size(0.4, 0.4, 0.8);
+    Colour col(0.2, 0.2, 0.8, 1.0);
     drawObject(pos, rot, size, col);
   }
 }
