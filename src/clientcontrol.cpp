@@ -119,7 +119,7 @@ void Clientcontrol::go()
 
     doloop(inputdelay, inputtime, &Clientcontrol::inputloop);
     doloop(networkdelay, networktime, &Clientcontrol::networkloop);
-    //doloop(physicsdelay, physicstime, &Clientcontrol::physicsloop);
+    doloop(physicsdelay, physicstime, &Clientcontrol::physicsloop);
     if (graphicsActive) doloop(graphicsdelay, graphicstime, &Clientcontrol::graphicsloop);
     doloop(sounddelay, soundtime, &Clientcontrol::soundloop);
     //doloop(transferdelay, transfertime, &Clientcontrol::transferloop);
@@ -240,6 +240,9 @@ void Clientcontrol::networkloop()
 
 void Clientcontrol::physicsloop()
 {
+  for (int i = 0; i < oggs; i++) {
+    ogg[i].moveme(sync);
+  }
 }
 
 void Clientcontrol::graphicsloop()

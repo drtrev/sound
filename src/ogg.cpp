@@ -240,15 +240,17 @@ ogg_stream::ogg_stream()
 
   sourceId = -1;
 
-  x = 0, y = 0, z = 0;
-  speedX = 0, speedY = 0, speedZ = 0;
-  paused = true;
-  moving = false;
-  homing = false;
-  targX = 0, targY = 0, targZ = -50; // land just in front of listener
-  friction = true;
+  synclimit = 0.03;
 
-  pitch = 1.0; // binaural test
+  //x = 0, y = 0, z = 0;
+  //speedX = 0, speedY = 0, speedZ = 0;
+  //paused = true;
+  //moving = true;
+  //homing = false;
+  //targX = 0, targY = 0, targZ = -10; // land just in front of listener
+  //friction = true;
+
+  props.pitch = 1.0; // binaural test
 
   //alSpeedOfSound(100000); // default 343.3
   //check("Speed");
@@ -272,8 +274,8 @@ ogg_stream::ogg_stream()
 
 void ogg_stream::setPitch(float p, bool setNow)
 {
-  pitch = p;
-  if (setNow) alSourcef(source, AL_PITCH, pitch); // TODO binaural test
+  props.pitch = p;
+  if (setNow) alSourcef(source, AL_PITCH, props.pitch); // TODO binaural test
 }
 
 void ogg_stream::open(string path)
@@ -324,8 +326,8 @@ void ogg_stream::initSource()
   //alGetSourcef(source, AL_ROLLOFF_FACTOR, &value);
   //cout << "rolloff: " << value << endl;
 
-  alSource3f(source, AL_POSITION,        x, y, z);
-  alSourcef(source, AL_PITCH, pitch); // TODO binaural test
+  alSource3f(source, AL_POSITION,        props.pos.x, props.pos.y, props.pos.z);
+  alSourcef(source, AL_PITCH, props.pitch); // TODO binaural test
   alSource3f(source, AL_VELOCITY,        0.0, 0.0, 0.0);
   alSource3f(source, AL_DIRECTION,       0.0, 0.0, 0.0); // if not zero, sound is directional
 
@@ -333,7 +335,7 @@ void ogg_stream::initSource()
   alSourcef (source, AL_REFERENCE_DISTANCE, 50); // default 1 - clamp gain below this
   alSourcei (source, AL_SOURCE_RELATIVE, AL_TRUE);
 
-  alListener3f( AL_POSITION, 0, 0, 0);
+  //alListener3f( AL_POSITION, 0, 0, 0);
 
   sourceInitialised = true;
   cout << "Source initialised" << endl;
@@ -560,10 +562,10 @@ int ogg_stream::getSourceId()
 
 void ogg_stream::setPosition(float nx, float ny, float nz)
 {
-  x = nx, y = ny, z = nz;
+  props.pos.x = nx, props.pos.y = ny, props.pos.z = nz;
   if (sourceInitialised) {
-    cout << "Setting pos: " << x << "," << y << "," << z << endl;
-    ALfloat sourcePosition[] = { x, y, z };
+    cout << "Setting pos: " << props.pos << endl;
+    ALfloat sourcePosition[] = { props.pos.x, props.pos.y, props.pos.z };
     alSourcefv(source, AL_POSITION, sourcePosition);
     check("set position");
   }
@@ -571,42 +573,42 @@ void ogg_stream::setPosition(float nx, float ny, float nz)
 
 void ogg_stream::getPosition(float &nx, float &ny, float &nz)
 {
-  nx = x, ny = y, nz = z;
+  nx = props.pos.x, ny = props.pos.y, nz = props.pos.z;
 }
 
 float ogg_stream::getX()
 {
-  return x;
+  return props.pos.x;
 }
 
 float ogg_stream::getY()
 {
-  return y;
+  return props.pos.y;
 }
 
 float ogg_stream::getZ()
 {
-  return z;
+  return props.pos.z;
 }
 
 void ogg_stream::setX(float nx)
 {
-  x = nx;
+  props.pos.x = nx;
 }
 
 void ogg_stream::setY(float nx)
 {
-  y = nx;
+  props.pos.y = nx;
 }
 
 void ogg_stream::setZ(float nx)
 {
-  z = nx;
+  props.pos.z = nx;
 }
 
 void ogg_stream::setSpeed(float sx, float sy, float sz)
 {
-  speedX = sx, speedY = sy, speedZ = sz;
+  props.speed.x = sx, props.speed.y = sy, props.speed.z = sz;
   //if (sourceInitialised) {
   //ALfloat sourceVelocity[] = { speedX / 100, speedY / 100, speedZ / 100 };
   //alSourcefv(source, AL_VELOCITY, sourceVelocity);
@@ -616,7 +618,7 @@ void ogg_stream::setSpeed(float sx, float sy, float sz)
 
 void ogg_stream::getSpeed(float &sx, float &sy, float &sz)
 {
-  sx = speedX, sy = speedY, sz = speedZ;
+  sx = props.speed.x, sy = props.speed.y, sz = props.speed.z;
 }
 
 /*void ogg_stream::updateVelocity()
@@ -642,67 +644,67 @@ void ogg_stream::setSpeedZ(float sz)
 
 float ogg_stream::getSpeedX()
 {
-  return speedX;
+  return props.speed.x;
 }
 
 float ogg_stream::getSpeedY()
 {
-  return speedY;
+  return props.speed.y;
 }
 
 float ogg_stream::getSpeedZ()
 {
-  return speedZ;
+  return props.speed.z;
 }
 
 void ogg_stream::setPaused(bool b)
 {
-  paused = b;
+  props.paused = b;
 }
 
 bool ogg_stream::getPaused()
 {
-  return paused;
+  return props.paused;
 }
 
 void ogg_stream::setMoving(bool b)
 {
-  moving = b;
+  props.moving = b;
 }
 
 bool ogg_stream::getMoving()
 {
-  return moving;
+  return props.moving;
 }
 
 void ogg_stream::setHoming(bool b)
 {
-  homing = b;
+  props.homing = b;
 }
 
 bool ogg_stream::getHoming()
 {
-  return homing;
+  return props.homing;
 }
 
 void ogg_stream::getTarget(float &tx, float &ty, float &tz)
 {
-  tx = targX, ty = targY, tz = targZ;
+  tx = props.targ.x, ty = props.targ.y, tz = props.targ.z;
 }
 
 void ogg_stream::setTarget(float tx, float ty, float tz)
 {
-  targX = tx, targY = ty, targZ = tz;
+  props.targ.x = tx, props.targ.y = ty, props.targ.z = tz;
 }
 
 void ogg_stream::setFriction(bool b)
 {
-  friction = b;
+  props.frictionon = b;
 }
 
 bool ogg_stream::getFriction()
 {
-  return friction;
+  return props.frictionon;
 }
 
 bool ogg_stream::update()
@@ -918,6 +920,72 @@ bool ogg_stream::getSourceInitialised()
 }
 
 
+void ogg_stream::moveme(double sync)
+{
+  if (sync > synclimit) sync = synclimit;
+
+  // this is left over from curses implementation, but I'm ok with a dead zone
+  // create a dead zone, because the slow movement as we stop can cause a jump into a new text coord
+  if (props.accel.x == props.oldAccel.x && fabs(props.speed.x) < props.minSpeed) props.speed.x = 0;
+  if (props.accel.y == props.oldAccel.y && fabs(props.speed.y) < props.minSpeed) props.speed.y = 0;
+  if (props.accel.z == props.oldAccel.z && fabs(props.speed.z) < props.minSpeed) props.speed.z = 0;
+
+  // this distance should be the integral of the velocity function, which can be
+  // found on that drag site
+  // hmm... acceleration's not constant. Need to find velocity function and then
+  // can get approximate acceleration between last frame using a = (v - u) / t
+  // Ok think I've got this now - basically calculating friction at tiny intervals
+  // is the same as working out the integral (an approximation)
+  //
+  // s = ut + 0.5 * att
+  // s is displacement. s equals ut plus a half a t-squared
+  // u is initial velocity, t is time, using 0 as time started accelerating
+
+  props.oldPos = props.pos;
+
+  props.pos.x += props.speed.x * sync + 0.5 * props.accel.x * sync * sync;
+  float result = props.speed.x * sync + 0.5 * props.accel.x * sync * sync;
+  props.pos.y += props.speed.y * sync + 0.5 * props.accel.y * sync * sync;
+  props.pos.z += props.speed.z * sync + 0.5 * props.accel.z * sync * sync;
+
+  if (props.moving) {
+    float amount = props.power * sync;
+    if (props.pos.z > props.targ.z) props.accel.z = -amount;
+    if (props.pos.z < props.targ.z) props.accel.z = amount;
+    if (props.pos.x > props.targ.x) props.accel.x = -amount;
+    if (props.pos.x < props.targ.x) props.accel.x = amount;
+    //cout << "props.accel.x" << props.accel.x << endl;
+    //if (props.speed.x > maxSpeed) speedX = maxSpeed;
+    //if (speedX < -maxSpeed) speedX = -maxSpeed;
+    //if (speedZ > maxSpeed) speedZ = maxSpeed;
+    //if (speedZ < -maxSpeed) speedZ = -maxSpeed;
+  }
+
+  // update velocity
+  // v = u + at
+  props.speed.x = props.speed.x + props.accel.x * sync;
+  props.speed.y = props.speed.y + props.accel.y * sync;
+  props.speed.z = props.speed.z + props.accel.z * sync;
+
+  // friction
+  // this is a percentage of speed, i.e. the faster you props the more air resistance
+  // this should really take into account time, see http://en.wikipedia.org/wiki/Drag_(physics)
+  // This works here with sync, but friction is assumed constant over that time period,
+  // so if it is running significantly slower then it will stop noticably quicker
+  // Think integral approximations: need small time intervals to be more precise.
+  props.accel.x = -props.friction * props.speed.x * sync;
+  props.accel.y = -props.friction * props.speed.y * sync;
+  props.accel.z = -props.friction * props.speed.z * sync;
+  //cout << "after friction props.accel.x" << props.accel.x << endl;
+
+  props.oldAccel = props.accel; // may be modified in input
+
+  if (sourceInitialised) {
+    ALfloat sourcePosition[] = { props.pos.x, props.pos.y, props.pos.z };
+    alSourcefv(source, AL_POSITION, sourcePosition);
+    check("set position");
+  }
+}
 
 // check for an error and pass a string to say where we are in the program
 // errorMaker - what made the error?

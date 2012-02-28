@@ -219,6 +219,12 @@ struct Source {
     if (keys & KEYS_RIGHT) {
       pos.x += 0.1;
     }
+    if (keys & KEYS_FORWARD) {
+      pos.z -= 0.1;
+    }
+    if (keys & KEYS_BACKWARD) {
+      pos.z += 0.1;
+    }
   }
 
   Source() : pos(0, 0, 0) {}

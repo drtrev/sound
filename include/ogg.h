@@ -38,6 +38,7 @@ using namespace std;
 #include <AL/alc.h> // the OpenAL context API
 #include <ogg/ogg.h>
 #include <vorbis/vorbisfile.h>
+#include "types.h"
 
 // Struct that contains the pointer to our file in memory
 struct SOggFile
@@ -117,6 +118,8 @@ class ogg_stream
 
     bool getSourceInitialised();
 
+    void moveme(double);
+
     void setPitch(float, bool); // binaural test
 
     //void killAL();
@@ -152,15 +155,26 @@ class ogg_stream
     bool sourceInitialised;
 
     int sourceId; // the source that it is bound to
-    float x, y, z;
-    float speedX, speedY, speedZ;
-    bool paused;
-    bool moving; // some kind of movement animation has been set up
-    bool homing; // homing in on centre
-    float targX, targY, targZ;
-    bool friction; // apply friction
 
-    float pitch; // binaural test
+    struct Props {
+      sound::Vector pos, oldPos, speed, targ, accel, oldAccel;
+      bool moving, homing, frictionon, paused;
+      float pitch, power, friction, minSpeed;
+
+      Props() : moving(true), homing(false), frictionon(true), paused(false), pitch(1), power(1000), friction(400), minSpeed(0.001) {}
+    } props;
+
+    float synclimit;
+
+    //float x, y, z;
+    //float speedX, speedY, speedZ;
+    //bool paused;
+    //bool moving; // some kind of movement animation has been set up
+    //bool homing; // homing in on centre
+    //float targX, targY, targZ;
+    //bool friction; // apply friction
+
+    //float pitch; // binaural test
 };
 
 
