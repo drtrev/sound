@@ -207,7 +207,7 @@ struct Ray {
 
 }
 
-struct Source {
+/*struct Source {
   sound::Vector pos;
 
   sound::Vector getPos() { return pos; }
@@ -228,6 +228,6 @@ struct Source {
   }
 
   Source() : pos(0, 0, 0) {}
-};
+};*/
 
 #endif

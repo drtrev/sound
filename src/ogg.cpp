@@ -805,6 +805,7 @@ bool ogg_stream::stream(ALuint buffer)
   while(size < OGG_BUFFER_SIZE)
   {
     //cout << "about to ov_read" << endl;
+    // TODO note that 2 might be wrong for mono data..., see docs for ov_read
     result = ov_read(&oggStream, pcm + size, OGG_BUFFER_SIZE - size, 0, 2, 1, &section);
     //cout << "done ov_read" << endl;
 
