@@ -1,6 +1,7 @@
 #ifndef SOUNDLOADEROGG_H
 #define SOUNDLOADEROGG_H
 
+#include "soundloader.h"
 #include <cstdio>
 
 // an implementation of soundloader using Vorbisfile
